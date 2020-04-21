@@ -6,7 +6,7 @@
 * Elasticsearch : Search of flowable/variables of process
 * Spark : machine learning 
 
-These SPARK could be replaced with tensorflow/keras with your model.
+Note SPARK could be replaced with tensorflow/keras with your model.
 
 #Set FOLLOWING ENV in needed operating system
 * SPARK_HOME = spark-installation-directory
