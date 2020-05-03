@@ -178,10 +178,16 @@ public class AnalyseDecisions {
             }
         }
 
+        // different impurity algorithms available
+        // Initially Using gini
+
         String impurityAlgorithm = "gini";
         int maxDepth = 2; // max depth of tree (to make it easier for demo purposes)
         int maxBins = 32; // max number of different values before considered continuous
-
+        
+        
+        // The step of training the decision tree model for our prediction 
+        
         DecisionTreeModel model = DecisionTree.trainClassifier(trainingData, outcomes.size(), 
                 categoricalFeaturesInfo, impurityAlgorithm, maxDepth, maxBins);
 

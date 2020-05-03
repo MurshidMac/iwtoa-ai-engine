@@ -253,6 +253,9 @@ public class DecisionAnalysisService {
                 
                 LOGGER.info("Spark app: Location" + System.getenv("FINAL_YEAR_DEMO_PROJECT"));
                 
+                // FINAL_YEAR_DEMO_PROJECT
+                // This should be the path for the spark-demo app with dependencies .jar file
+
                 SparkAppHandle sparkAppHandle = new SparkLauncher()
                         .setSparkHome(System.getenv("SPARK_HOME"))
                         .setAppResource(System.getenv("FINAL_YEAR_DEMO_PROJECT"))
