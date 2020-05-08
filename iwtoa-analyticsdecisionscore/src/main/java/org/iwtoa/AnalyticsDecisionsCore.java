@@ -103,10 +103,12 @@ public class AnalyticsDecisionsCore {
             }
         }
         
-        inferDecisionTree(processDefinitionId, taskKey, outcomeVariable, outcomes, featureIndices, categoricalValues);
+        inferMachineLearningModel(processDefinitionId, taskKey, outcomeVariable, outcomes, featureIndices, categoricalValues);
     }
 
-    private static void inferDecisionTree(final String processDefinitionId, 
+    // The machine learning model used in deciding the factors passed
+    // Initially Uses Random Forest, DecisionTree, Gini, Inference Algorithm
+    private static void inferMachineLearningModel(final String processDefinitionId, 
             final String taskKey,
             final String outcomeVariable, 
             final List<String> outcomes, 
