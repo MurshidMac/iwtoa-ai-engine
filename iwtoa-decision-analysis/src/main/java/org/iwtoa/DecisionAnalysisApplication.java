@@ -35,7 +35,7 @@ import com.zaxxer.hikari.HikariDataSource;
  * Decision Analysis Service: periodically analysis a {@link BpmnModel} and starts a Spark job to
  * determine the decision tree for a human task + form and outcomes. 
  * 
- * @author Murshid Hassen
+ * @author MurshidHassen
  */
 @SpringBootApplication
 @EnableScheduling

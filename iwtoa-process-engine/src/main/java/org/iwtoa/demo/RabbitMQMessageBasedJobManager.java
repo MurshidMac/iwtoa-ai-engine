@@ -17,7 +17,7 @@ import org.flowable.job.api.JobInfo;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 /**
- * @author Murshid Hassen
+ * @author MurshidHassen
  */
 public class RabbitMQMessageBasedJobManager extends AbstractMessageBasedJobManager {
 

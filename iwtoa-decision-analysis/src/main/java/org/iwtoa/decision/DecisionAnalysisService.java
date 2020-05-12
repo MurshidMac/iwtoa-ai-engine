@@ -51,7 +51,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
- * @author Murshid Hassen
+ * @author MurshidHassen
  */
 @Service
 public class DecisionAnalysisService {
@@ -74,7 +74,6 @@ public class DecisionAnalysisService {
 
         LOGGER.info("Starting decision analysis ...");
         
-        // Hardcoded process definition for demo, but obviouysly can be parameterized
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                 .processDefinitionKey("defect").latestVersion().singleResult();
         if (processDefinition == null) {
@@ -85,7 +84,7 @@ public class DecisionAnalysisService {
         
         /*
 
-            1) Look for pattern: user tasks with form + exclusive gateway + sequenceflows with form outcomes
+            1) Look for pattern: user tasks with form + exclusive gateway + sequence flows with form outcomes
 
             2) Calculate all paths from that user task to the start + gather the variables (form fields) along those paths
             

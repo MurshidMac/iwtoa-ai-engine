@@ -45,7 +45,7 @@ import com.zaxxer.hikari.HikariDataSource;
  *   the flowable-spring-boot-starter-basic dependency to the pom.xml
  * - A RabbitMQ listener that will receive async history data and send it to Elasticsearch  
  * 
- * @author Murshid Hassen
+ * @author MurshidHassen
  */
 @SpringBootApplication(exclude = org.flowable.spring.boot.SecurityAutoConfiguration.class)
 public class ListenerApplication {

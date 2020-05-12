@@ -22,7 +22,7 @@ import org.flowable.form.spring.configurator.SpringFormEngineConfigurator;
 import org.flowable.spring.SpringProcessEngineConfiguration;
 import org.iwtoa.demo.ProcessService;
 import org.iwtoa.demo.RabbitMQMessageBasedJobManager;
-import org.iwtoa.demo.StartController;
+import org.iwtoa.demo.CreateProcessController;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -48,9 +48,9 @@ import com.zaxxer.hikari.HikariDataSource;
  * Process Service Application: 
  * 
  * - Embedded Flowable process engine, configured to send async history jobs to Rabbit MQ
- * - A simple REST endpoint (see {@link StartController}) that, when called, will start up a number of process instances 
+ * - A simple REST endpoint (see {@link CreateProcessController}) that, when called, will start up a number of process instances 
  * 
- * @author Murshid Hassen
+ * @author MurshidHassen
  */
 @SpringBootApplication
 @EnableAsync
@@ -145,7 +145,7 @@ public class ProcessApplication {
     public CommandLineRunner schedulingRunner(final TaskExecutor executor, final AmqpAdmin amqpAdmin, final ProcessService processStarter) {
         return args -> executor.execute(() -> {
             
-            // Init Rabbit exchange and queue
+            // Initiate Rabbit exchange and queue
             amqpAdmin.deleteExchange(EXCHANGE);
             TopicExchange exchange = new TopicExchange(EXCHANGE);
             amqpAdmin.declareExchange(exchange);

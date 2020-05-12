@@ -36,7 +36,7 @@ import org.iwtoa.dto.Condition.ConditionOperation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * @author Murshid Hassen
+ * @author MurshidHassen
  */
 public class RuleHelper {
 

@@ -18,20 +18,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Quick-n-Dirty rest controller to trigger starting a number of random process instances.
+ * Rest controller to trigger starting a number of random process instances.
  * 
- * @author Murshid Hassen
+ * @author MurshidHassen
  */
 @RestController
-public class StartController {
+public class CreateProcessController {
     
     @Autowired
     private ProcessService processService;
 
-    @GetMapping("/start/{nrOfInstances}")
+    @GetMapping("/createprocess/{nrOfInstances}")
     public String start(@PathVariable int nrOfInstances) {
+    	// Call the execute method
         processService.execute(nrOfInstances);
-        return "Triggered the start of " + nrOfInstances + " instances";
+        return "Process started of " + nrOfInstances + " instances";
     }
 
 }

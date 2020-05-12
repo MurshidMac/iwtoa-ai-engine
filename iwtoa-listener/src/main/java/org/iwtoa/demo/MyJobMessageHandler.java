@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * {@link AsyncHistoryJobMessageHandler} that filters on variable creation and sends the data to Elasticsearch.
  * 
- * @author Murshid Hassen
+ * @author MurshidHassen
  */
 public class MyJobMessageHandler implements AsyncHistoryJobMessageHandler {
     
