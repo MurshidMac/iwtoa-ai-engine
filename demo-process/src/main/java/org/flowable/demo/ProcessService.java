@@ -82,7 +82,7 @@ public class ProcessService {
                 
                 if ("Capture defect details".equals(task.getName())) {
                     vars.put("income", 10000);
-                    vars.put("defect", 50000);
+                    vars.put("defect", 50000);  // Cost of a defect 
                     vars.put("age", random.nextInt(60));
                     vars.put("nationality", COUNTRIES.get(random.nextInt(3)));
                     vars.put("fullname", "Murshid Hassen " + random.nextInt(1000));
