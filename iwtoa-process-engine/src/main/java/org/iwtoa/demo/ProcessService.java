@@ -34,7 +34,7 @@ public class ProcessService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProcessService.class);
     
     private static final List<String> COUNTRIES 
-        = Arrays.asList("UK", "Dutch", "Belgian", "German", "French", "Italian", "Spanish","SriLankan", "Other");
+        = Arrays.asList("UK","SriLankan", "Dutch", "Belgian", "German", "French", "Italian", "Spanish", "Other");
     
     private static Random random = new Random();
     
@@ -52,11 +52,11 @@ public class ProcessService {
         deployProcessAppIfNeeded();
         
         for (int i = 0; i < nrOfInstances; i++) {
-            // Defect Scenario
-        	processEngine.getRuntimeService().startProcessInstanceByKey("defect");
-        	randomlyCompleteDefectTasks(random);
-            
-            // Loan Scenario
+            // Defect Start Scenario
+//        	processEngine.getRuntimeService().startProcessInstanceByKey("defect");
+//        	randomlyCompleteDefectTasks(random);
+//            
+            // Loan Start Scenario
             processEngine.getRuntimeService().startProcessInstanceByKey("loan");
             randomlyCompleteLoanTasks(random);
             
@@ -64,25 +64,25 @@ public class ProcessService {
         
         LOGGER.info("Started " + nrOfInstances + " process instances");
     }
-    
+    // Initially we only test against loan
     private void deployProcessAppIfNeeded() {
         RepositoryService repositoryService = processEngine.getRepositoryService();
-        long count = repositoryService.createProcessDefinitionQuery()
-                .processDefinitionKey("defect")
-                .count();
+        // long count = repositoryService.createProcessDefinitionQuery()
+        //         .processDefinitionKey("defect")
+        //         .count();
         long countloan = repositoryService.createProcessDefinitionQuery()
                 .processDefinitionKey("loan")
                 .count();
-        if (count == 0) {
-            processEngine.getRepositoryService().createDeployment()
-                .addZipInputStream(new ZipInputStream(this.getClass().getClassLoader().getResourceAsStream("defect.zip")))
-                .deploy();
-        }
+        //if (count == 0) {
+            //processEngine.getRepositoryService().createDeployment()
+              //  .addZipInputStream(new ZipInputStream(this.getClass().getClassLoader().getResourceAsStream("defect.zip")))
+              //  .deploy();
+        //}
         
         if(countloan == 0) {
         	processEngine.getRepositoryService().createDeployment()
-            .addZipInputStream(new ZipInputStream(this.getClass().getClassLoader().getResourceAsStream("loan.zip")))
-            .deploy();
+                .addZipInputStream(new ZipInputStream(this.getClass().getClassLoader().getResourceAsStream("loan.zip")))
+                .deploy();
         }
     }
 
@@ -106,7 +106,7 @@ public class ProcessService {
                 } else if("Defect Review".equals(task.getName())) {
                     String countryValue = processEngine.getTaskService().getVariable(task.getId(), "nationality").toString();
                     Integer ageValue = (Integer) processEngine.getTaskService().getVariable(task.getId(), "age");
-                    if ("UK".equals(countryValue)) {
+                    if ("SriLankan".equals(countryValue)) {
                         vars.put("form_defectreview_outcome", "Accept");
                     } else if (ageValue <= 30) {
                         vars.put("form_defectreview_outcome", "Reject");
@@ -150,7 +150,7 @@ public class ProcessService {
                     } else if("Loan Review".equals(task.getName())) {
                         String countryValue = processEngine.getTaskService().getVariable(task.getId(), "nationality").toString();
                         Integer ageValue = (Integer) processEngine.getTaskService().getVariable(task.getId(), "age");
-                        if ("Belgian".equals(countryValue)) {
+                        if ("SriLankan".equals(countryValue)) {
                             vars.put("form_loanreview_outcome", "Accept");
                         } else if (ageValue <= 30) {
                             vars.put("form_loanreview_outcome", "Reject");

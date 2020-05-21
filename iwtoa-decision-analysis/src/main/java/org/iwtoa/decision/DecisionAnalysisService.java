@@ -75,7 +75,7 @@ public class DecisionAnalysisService {
         LOGGER.info("Starting decision analysis ...");
         
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
-                .processDefinitionKey("defect").latestVersion().singleResult();
+                .processDefinitionKey("loan").latestVersion().singleResult();
         if (processDefinition == null) {
             LOGGER.info("No process definition found. No analysis done.");
             return;

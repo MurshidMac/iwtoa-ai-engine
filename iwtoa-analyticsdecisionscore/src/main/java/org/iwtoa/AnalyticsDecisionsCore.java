@@ -36,7 +36,6 @@ import scala.Tuple2;
 /**
  * Spark application that determines automatic rules based on human task + forms.
  * Triggered by the Decision Analysis Service. 
- * 
  * @author MurshidHassen
  */
 public class AnalyticsDecisionsCore {
@@ -184,13 +183,26 @@ public class AnalyticsDecisionsCore {
         // Initially Using gini
 
         String impurityAlgorithmGini = System.getenv("IMPURITY") ;
-        if(impurityAlgorithmGini.isEmpty() == true || impurityAlgorithmGini == null) {
-        	impurityAlgorithmGini = "gini";
-        }
+    	//impurityAlgorithmGini = "gini";
+        impurityAlgorithmGini = "entropy";
+//        	impurityAlgorithmGini = "variance";
+
+
+//        if(impurityAlgorithmGini.isEmpty() == true || impurityAlgorithmGini == null) {
+//        }
         
+//        if(impurityAlgorithmGini.isEmpty() != true || impurityAlgorithmGini == "entropy") {
+//        	impurityAlgorithmGini = "entropy";
+//        }
+//        
+//        if(impurityAlgorithmGini.isEmpty() == true || impurityAlgorithmGini == "variance") {
+//        	impurityAlgorithmGini = "variance";
+//        }
+        
+        // By Default There will be two algorithms 
         String impurityAlgorithmEntropy = "entropy";
         String impurityAlgorithmVariance = "variance";
-
+        
         int maxDepth = 2; // max depth of tree (to make it easier for demo purposes)
         int maxBins = 32; // max number of different values before considered continuous
         
@@ -202,13 +214,13 @@ public class AnalyticsDecisionsCore {
 
         // The step of training the decision tree model for our prediction 
         
-        DecisionTreeModel modelEntropy = DecisionTree.trainClassifier(trainingData, outcomes.size(), 
-                categoricalFeaturesInfo, impurityAlgorithmEntropy, maxDepth, maxBins);
+//        DecisionTreeModel modelEntropy = DecisionTree.trainClassifier(trainingData, outcomes.size(), 
+//                categoricalFeaturesInfo, impurityAlgorithmEntropy, maxDepth, maxBins);
 
         // The step of training the decision tree model for our prediction 
-        
-        DecisionTreeModel modelVariance = DecisionTree.trainClassifier(trainingData, outcomes.size(), 
-                categoricalFeaturesInfo, impurityAlgorithmVariance, maxDepth, maxBins);
+//        
+//        DecisionTreeModel modelVariance = DecisionTree.trainClassifier(trainingData, outcomes.size(), 
+//                categoricalFeaturesInfo, impurityAlgorithmVariance, maxDepth, maxBins);
 
         // Evaluate model on test instances and compute test error
         JavaPairRDD<Double, Double> predictionAndLabel = testData.mapToPair(p -> new Tuple2<>(model.predict(p.features()), p.label()));
@@ -219,27 +231,30 @@ public class AnalyticsDecisionsCore {
 
         
         // Evaluate model on test instances and compute test error
-        JavaPairRDD<Double, Double> predictionAndLabelEntropy = testData.mapToPair(p -> new Tuple2<>(modelEntropy.predict(p.features()), p.label()));
-        double testErrEntropy = predictionAndLabelEntropy.filter(pl -> !pl._1().equals(pl._2())).count() / (double) testData.count();
-
-        System.out.println("Test Error: " + testErrEntropy);
-        System.out.println("Learned classification tree model:\n" + model.toDebugString());
+//        JavaPairRDD<Double, Double> predictionAndLabelEntropy = testData.mapToPair(p -> new Tuple2<>(modelEntropy.predict(p.features()), p.label()));
+//        double testErrEntropy = predictionAndLabelEntropy.filter(pl -> !pl._1().equals(pl._2())).count() / (double) testData.count();
+//
+//        System.out.println("Test Error: " + testErrEntropy);
+//        System.out.println("Learned classification tree model:\n" + model.toDebugString());
 
         
         // Evaluate model on test instances and compute test error
-        JavaPairRDD<Double, Double> predictionAndLabelVarience = testData.mapToPair(p -> new Tuple2<>(modelVariance.predict(p.features()), p.label()));
-        double testErrVarience = predictionAndLabelVarience.filter(pl -> !pl._1().equals(pl._2())).count() / (double) testData.count();
-
-        System.out.println("Test Error: " + testErrVarience);
-        System.out.println("Learned classification tree model:\n" + model.toDebugString());        
+//        JavaPairRDD<Double, Double> predictionAndLabelVarience = testData.mapToPair(p -> new Tuple2<>(modelVariance.predict(p.features()), p.label()));
+//        double testErrVarience = predictionAndLabelVarience.filter(pl -> !pl._1().equals(pl._2())).count() / (double) testData.count();
+//
+//        System.out.println("Test Error: " + testErrVarience);
+//        System.out.println("Learned classification tree model:\n" + model.toDebugString());        
         
         // Save and load model
-        model.save(javaSparkContext.sc(), "target/myDecisionTreeClassificationModel");
-        DecisionTreeModel sameModel = DecisionTreeModel.load(javaSparkContext.sc(),"target/myDecisionTreeClassificationModel");
+//        model.save(javaSparkContext.sc(), "target/myGiniDecisionTreeClassificationModel");
+//        modelEntropy.save(javaSparkContext.sc(), "target/myEntropyDecisionTreeClassificationModel");
+//        modelVariance.save(javaSparkContext.sc(), "target/myVarienceDecisionTreeClassificationModel");
+        
+        //DecisionTreeModel sameModel = DecisionTreeModel.load(javaSparkContext.sc(),"target/myDecisionTreeClassificationModel");
         
         List<Rule> rules = RuleHelper.determineLearnedRules(model, featureIndices, outcomeVariable, categoricalValues, outcomes);
-        List<Rule> rulesEntropy = RuleHelper.determineLearnedRules(modelEntropy, featureIndices, outcomeVariable, categoricalValues, outcomes);
-        List<Rule> rulesVarience = RuleHelper.determineLearnedRules(modelVariance, featureIndices, outcomeVariable, categoricalValues, outcomes);
+//        List<Rule> rulesEntropy = RuleHelper.determineLearnedRules(modelEntropy, featureIndices, outcomeVariable, categoricalValues, outcomes);
+//       List<Rule> rulesVarience = RuleHelper.determineLearnedRules(modelVariance, featureIndices, outcomeVariable, categoricalValues, outcomes);
         
         
         System.out.println("Learned rules from Gini:");
@@ -253,27 +268,27 @@ public class AnalyticsDecisionsCore {
         System.out.println();
         RuleHelper.storeRules(rules, processDefinitionId, taskKey);
         
-        System.out.println("Learned rules from Entropy:");
-        rulesEntropy.forEach(rule -> System.out.println(rule));
-        System.out.println();
-        System.out.println();
-        
-        System.out.println("Simplified rules: Entropy");
-        RuleHelper.simplifyRules(rules);
-        rulesEntropy.forEach(rule -> System.out.println(rule));
-        System.out.println();
-        RuleHelper.storeRules(rules, processDefinitionId, taskKey);
-        
-        System.out.println("Learned rules from Varience:");
-        rulesVarience.forEach(rule -> System.out.println(rule));
-        System.out.println();
-        System.out.println();
-        
-        System.out.println("Simplified rules: Varience");
-        RuleHelper.simplifyRules(rules);
-        rulesVarience.forEach(rule -> System.out.println(rule));
-        System.out.println();
-        RuleHelper.storeRules(rules, processDefinitionId, taskKey);
+//        System.out.println("Learned rules from Entropy:");
+////        rulesEntropy.forEach(rule -> System.out.println(rule));
+//        System.out.println();
+//        System.out.println();
+//        
+//        System.out.println("Simplified rules: Entropy");
+//        RuleHelper.simplifyRules(rules);
+////        rulesEntropy.forEach(rule -> System.out.println(rule));
+//        System.out.println();
+//        RuleHelper.storeRules(rules, processDefinitionId, taskKey);
+//        
+//        System.out.println("Learned rules from Varience:");
+////        rulesVarience.forEach(rule -> System.out.println(rule));
+//        System.out.println();
+//        System.out.println();
+//        
+//        System.out.println("Simplified rules: Varience");
+//        RuleHelper.simplifyRules(rules);
+////        rulesVarience.forEach(rule -> System.out.println(rule));
+//        System.out.println();
+//        RuleHelper.storeRules(rules, processDefinitionId, taskKey);
     }
 
 }

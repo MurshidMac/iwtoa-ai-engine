@@ -1,0 +1,64 @@
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101" id="definition_e3c70382-bdaa-11e7-a234-baca12a46316" name="Credite advice" namespace="http://www.flowable.org/dmn">
+  <decision id="credit" name="Credite advice">
+    <decisionTable id="decisionTable_52422dad-bd88-11e7-90a6-92915f9dcc1e" hitPolicy="FIRST">
+      <input label="Age">
+        <inputExpression id="inputExpression_1" typeRef="number">
+          <text>age</text>
+        </inputExpression>
+      </input>
+      <input label="Status">
+        <inputExpression id="inputExpression_3" typeRef="string">
+          <text>home</text>
+        </inputExpression>
+        <inputValues>
+          <text>"Rented","Mortgaged","Owned"</text>
+        </inputValues>
+      </input>
+      <output id="outputExpression_2" label="Credit Guidance" name="guidance" typeRef="string"></output>
+      <rule>
+        <inputEntry id="inputEntry_1_1">
+          <text><![CDATA[< 25]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_3_1">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_2_1">
+          <text><![CDATA["Young, so need further checks"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_1_2">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_3_2">
+          <text><![CDATA["Rented"]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_2_2">
+          <text><![CDATA["No collateral, so consider viability"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_1_3">
+          <text><![CDATA[> 60]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_3_3">
+          <text><![CDATA["Mortgaged"]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_2_3">
+          <text><![CDATA["Potentially overstretched debt to consider"]]></text>
+        </outputEntry>
+      </rule>
+      <rule>
+        <inputEntry id="inputEntry_1_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <inputEntry id="inputEntry_3_4">
+          <text><![CDATA[-]]></text>
+        </inputEntry>
+        <outputEntry id="outputEntry_2_4">
+          <text><![CDATA["No guidance"]]></text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>
