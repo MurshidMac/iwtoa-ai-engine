@@ -1,0 +1,140 @@
+version: '3.7'
+services:
+    demo-db:
+        image: mysql:5.7.26
+        container_name: iwtoa-mysql-5.7.26
+        volumes:
+            - db_data:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: flowable
+            MYSQL_DATABASE: demo
+            MYSQL_USER: flowable
+            MYSQL_PASSWORD: flowable
+        ports:
+            - 3306:3306
+    
+    adminer:
+        image: adminer
+        ports:
+            - 18080:8080
+    iwtoa-rest-app:
+        image: flowable/flowable-rest
+        depends_on:
+            - demo-db
+        environment:
+            - SERVER_PORT=9977
+            - SPRING_DATASOURCE_DRIVER-CLASS-NAME=com.mysql.jdbc.Driver
+            - SPRING_DATASOURCE_URL=jdbc:mysql://demo-db:3306/demo?autoReconnect=true
+            - SPRING_DATASOURCE_USERNAME=flowable
+            - SPRING_DATASOURCE_PASSWORD=flowable
+            - FLOWABLE_REST_APP_ADMIN_USER-ID=rest-admin
+            - FLOWABLE_REST_APP_ADMIN_PASSWORD=test
+            - FLOWABLE_REST_APP_ADMIN_FIRST-NAME=Rest
+            - FLOWABLE_REST_APP_ADMIN_LAST-NAME=Admin
+        ports:
+            - 9977:9977
+        entrypoint: ["./wait-for-something.sh", "demo-db", "3306", "MySQL", "java", "-jar", "app.war"]
+    iwtoa-idm-app:
+        image: flowable/flowable-idm
+        container_name: iwtoa-idm
+        depends_on:
+            - demo-db
+        environment:
+            - SERVER_PORT=8079
+            - SPRING_DATASOURCE_DRIVER-CLASS-NAME=com.mysql.jdbc.Driver
+            - SPRING_DATASOURCE_URL=jdbc:mysql://demo-db:3306/demo?autoReconnect=true
+            - SPRING_DATASOURCE_USERNAME=flowable
+            - SPRING_DATASOURCE_PASSWORD=flowable
+            - FLOWABLE_REST_APP_ADMIN_USER-ID=rest-admin
+            - FLOWABLE_REST_APP_ADMIN_PASSWORD=test
+            - FLOWABLE_REST_APP_ADMIN_FIRST-NAME=Rest
+            - FLOWABLE_REST_APP_ADMIN_LAST-NAME=Admin
+        ports:
+            - 8079:8079
+        entrypoint: ["./wait-for-something.sh", "demo-db", "3306", "MySQL", "java", "-jar", "app.war"]
+    iwtoa-task-app:
+        image: flowable/flowable-task
+        container_name: iwtoa-task
+        depends_on:
+            - demo-db
+            - iwtoa-idm-app
+        environment:
+            - SERVER_PORT=9999
+            - SPRING_DATASOURCE_DRIVER-CLASS-NAME=com.mysql.jdbc.Driver
+            - SPRING_DATASOURCE_URL=jdbc:mysql://demo-db:3306/demo?autoReconnect=true
+            - SPRING_DATASOURCE_USERNAME=flowable
+            - SPRING_DATASOURCE_PASSWORD=flowable
+            - FLOWABLE_COMMON_APP_IDM-URL=http://iwtoa-idm-app:8079/iwtoa-idm
+            - FLOWABLE_COMMON_APP_IDM-REDIRECT-URL=http://localhost:8079/iwtoa-idm
+            - FLOWABLE_COMMON_APP_IDM-ADMIN_USER=admin
+            - FLOWABLE_COMMON_APP_IDM-ADMIN_PASSWORD=test
+        ports:
+            - 9999:9999
+        entrypoint: ["./wait-for-something.sh", "demo-db", "3306", "MySQL", "java", "-jar", "app.war"]
+    iwtoa-modeler-app:
+        image: flowable/flowable-modeler
+        container_name: iwtoa-modeler
+        depends_on:
+            - demo-db
+            - iwtoa-idm-app
+            - iwtoa-task-app
+        environment:
+            - SERVER_PORT=8888
+            - SPRING_DATASOURCE_DRIVER-CLASS-NAME=com.mysql.jdbc.Driver
+            - SPRING_DATASOURCE_URL=jdbc:mysql://demo-db:3306/demo?autoReconnect=true
+            - SPRING_DATASOURCE_USERNAME=flowable
+            - SPRING_DATASOURCE_PASSWORD=flowable
+            - FLOWABLE_COMMON_APP_IDM-URL=http://iwtoa-idm-app:8079/iwtoa-idm
+            - FLOWABLE_COMMON_APP_IDM-REDIRECT-URL=http://localhost:8079/iwtoa-idm
+            - FLOWABLE_COMMON_APP_IDM-ADMIN_USER=admin
+            - FLOWABLE_COMMON_APP_IDM-ADMIN_PASSWORD=test
+            - FLOWABLE_MODELER_APP_DEPLOYMENT-API-URL=http://iwtoa-task-app:9999/iwtoa-task/app-api
+        ports:
+            - 8888:8888
+        entrypoint: ["./wait-for-something.sh", "demo-db", "3306", "MySQL", "java", "-jar", "app.war"]
+    iwtoa-admin-app:
+        image: flowable/flowable-admin
+        container_name: iwtoa-admin
+        depends_on:
+            - demo-db
+            - iwtoa-idm-app
+            - iwtoa-task-app
+        environment:
+            - SERVER_PORT=9988
+            - SPRING_DATASOURCE_DRIVER-CLASS-NAME=com.mysql.jdbc.Driver
+            - SPRING_DATASOURCE_URL=jdbc:mysql://demo-db:3306/demo?autoReconnect=true
+            - SPRING_DATASOURCE_USERNAME=flowable
+            - SPRING_DATASOURCE_PASSWORD=flowable
+            - FLOWABLE_COMMON_APP_IDM-URL=http://iwtoa-idm-app:8079/iwtoa-idm
+            - FLOWABLE_COMMON_APP_IDM-REDIRECT-URL=http://localhost:8079/iwtoa-idm
+            - FLOWABLE_COMMON_APP_IDM-ADMIN_USER=admin
+            - FLOWABLE_COMMON_APP_IDM-ADMIN_PASSWORD=test
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_PROCESS_SERVER-ADDRESS=http://iwtoa-task-app
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_PROCESS_PORT=9999
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_PROCESS_CONTEXT-ROOT=iwtoa-task
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_PROCESS_REST-ROOT=process-api
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_CMMN_SERVER-ADDRESS=http://iwtoa-task-app
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_CMMN_PORT=9999
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_CMMN_CONTEXT-ROOT=iwtoa-task
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_CMMN_REST-ROOT=cmmn-api
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_DMN_SERVER-ADDRESS=http://iwtoa-task-app
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_DMN_PORT=9999
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_DMN_CONTEXT-ROOT=iwtoa-task
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_DMN_REST-ROOT=dmn-api
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_FORM_SERVER-ADDRESS=http://iwtoa-task-app
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_FORM_PORT=9999
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_FORM_CONTEXT-ROOT=iwtoa-task
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_FORM_REST-ROOT=form-api
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_CONTENT_SERVER-ADDRESS=http://iwtoa-task-app
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_CONTENT_PORT=9999
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_CONTENT_CONTEXT-ROOT=iwtoa-task
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_CONTENT_REST-ROOT=content-api
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_APP_SERVER-ADDRESS=http://iwtoa-task-app
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_APP_PORT=9999
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_APP_CONTEXT-ROOT=iwtoa-task
+            - FLOWABLE_ADMIN_APP_SERVER-CONFIG_APP_REST-ROOT=app-api
+        ports:
+            - 9988:9988
+        entrypoint: ["./wait-for-something.sh", "demo-db", "3306", "MySQL", "java", "-jar", "app.war"]
+volumes:
+    db_data: {}
