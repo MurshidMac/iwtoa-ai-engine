@@ -92,12 +92,12 @@ public class DecisionAnalysisService {
 
         */
         
-        // Step (1)
+        // Step (1) Find UserTasks on BPMN Model
         LOGGER.info("Analyzing process definition " + processDefinition.getId());
         List<UserTask> matchingUserTasks = findUserTasksMatchingPattern(bpmnModel);
         
         
-        // Step (2) 
+        // Step (2) Find Variable Values of Each UserTasks From Form Field
         Map<String, List<String>> outcomesMap = new HashMap<>(); // userTask.id -> outcomes
         Map<String, Map<String, List<String>>> possibleValueCounts // userTask.id -> {variable, distinct_values_count}
             = determinePossibleVariablesForUserTasks(processDefinition, matchingUserTasks, outcomesMap);  

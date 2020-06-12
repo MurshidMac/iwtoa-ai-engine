@@ -183,9 +183,9 @@ public class AnalyticsDecisionsCore {
         // Initially Using gini
 
         String impurityAlgorithmGini = System.getenv("IMPURITY") ;
-    	//impurityAlgorithmGini = "gini";
-        impurityAlgorithmGini = "entropy";
-//        	impurityAlgorithmGini = "variance";
+    	impurityAlgorithmGini = "gini";
+//      impurityAlgorithmGini = "entropy";
+//      impurityAlgorithmGini = "variance";
 
 
 //        if(impurityAlgorithmGini.isEmpty() == true || impurityAlgorithmGini == null) {

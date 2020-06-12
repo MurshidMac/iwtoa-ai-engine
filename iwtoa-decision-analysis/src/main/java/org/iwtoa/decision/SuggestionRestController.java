@@ -12,6 +12,7 @@
  */
 package org.iwtoa.decision;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,15 +30,21 @@ public class SuggestionRestController {
     private JdbcTemplate jdbcTemplate;
     
     @GetMapping("/suggestions/{taskKey}")
-    public String getSuggestions(@PathVariable String taskKey) {
+    public JSONObject getSuggestions(@PathVariable String taskKey) {
+        JSONObject jsonObject = new JSONObject();
+            
         try {
-            return jdbcTemplate.queryForObject("SELECT RULES_ from RULES where TASK_KEY_ = ? order by TIME_STAMP_ desc LIMIT 1", new String[] { taskKey}, String.class);
+        
+            String jdbcval = jdbcTemplate.queryForObject("SELECT RULES_ from RULES where TASK_KEY_ = ? order by TIME_STAMP_ desc LIMIT 1", new String[] { taskKey}, String.class);
+            jsonObject.put("MLRules", jdbcval);
+            return jsonObject;
+        
         } catch (IncorrectResultSizeDataAccessException ire) {
             // ignore
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return jsonObject;
     }
     
 }

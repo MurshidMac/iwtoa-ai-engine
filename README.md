@@ -12,3 +12,8 @@ Note SPARK could be replaced with tensorflow/keras with your model.
 * SPARK_HOME = spark-installation-directory
 * FINAL_YEAR_PROJECT = spark-app- JAR directory
 * FOR Benchmarking = Set MODE as per the Database Used Either Mongo or MySQL
+
+![Process of Implementation](procedure.png)
+
+![System Design](systemdesign.png)
+
