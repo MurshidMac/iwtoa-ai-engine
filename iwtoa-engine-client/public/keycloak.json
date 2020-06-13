@@ -1,0 +1,8 @@
+{
+    "realm": "flowable-demo",
+    "auth-server-url": "${DPA_KEYCLOAK_ADDRESS}",
+    "ssl-required": "external",
+    "resource": "flowable-work-demo",
+    "public-client": true,
+    "confidential-port": 0
+}
