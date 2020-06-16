@@ -57,7 +57,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan("org.iwtoa.demo")
 public class ProcessApplication {
     
-    public static final String EXCHANGE = "flowable-exchange";
+    public static final String EXCHANGE = "iwtoaprocess-exchange";
 
     @Bean
     public DataSource dataSource() {
@@ -149,9 +149,9 @@ public class ProcessApplication {
             amqpAdmin.deleteExchange(EXCHANGE);
             TopicExchange exchange = new TopicExchange(EXCHANGE);
             amqpAdmin.declareExchange(exchange);
-            Queue queue = new Queue("flowable-history-jobs", true);
+            Queue queue = new Queue("iwtoaprocess-history-jobs", true);
             amqpAdmin.declareQueue(queue);
-            amqpAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange).with("flowable-history-jobs"));
+            amqpAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange).with("iwtoaprocess-history-jobs"));
           
         });
     }

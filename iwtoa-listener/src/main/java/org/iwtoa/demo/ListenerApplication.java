@@ -50,7 +50,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @SpringBootApplication(exclude = org.flowable.spring.boot.SecurityAutoConfiguration.class)
 public class ListenerApplication {
     
-    private static final String queueName = "flowable-history-jobs";
+    private static final String queueName = "iwtoaprocess-history-jobs";
     
     @Bean
     public Queue queue() {
@@ -64,7 +64,7 @@ public class ListenerApplication {
     
     @Bean
     public TopicExchange exchange() {
-        return new TopicExchange("flowable-exchange");
+        return new TopicExchange("iwtoaprocess-exchange");
     }
     
     @Bean
