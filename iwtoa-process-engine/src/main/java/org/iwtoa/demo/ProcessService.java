@@ -53,9 +53,9 @@ public class ProcessService {
         
         for (int i = 0; i < nrOfInstances; i++) {
             // Defect Start Scenario
-//        	processEngine.getRuntimeService().startProcessInstanceByKey("defect");
-//        	randomlyCompleteDefectTasks(random);
-//            
+         	processEngine.getRuntimeService().startProcessInstanceByKey("defect");
+        	randomlyCompleteDefectTasks(random);
+            
             // Loan Start Scenario
             processEngine.getRuntimeService().startProcessInstanceByKey("loan");
             randomlyCompleteLoanTasks(random);
@@ -64,20 +64,20 @@ public class ProcessService {
         
         LOGGER.info("Started " + nrOfInstances + " process instances");
     }
-    // Initially we only test against loan
+    // Initially we only test against loan and defects
     private void deployProcessAppIfNeeded() {
         RepositoryService repositoryService = processEngine.getRepositoryService();
-        // long count = repositoryService.createProcessDefinitionQuery()
-        //         .processDefinitionKey("defect")
-        //         .count();
+         long count = repositoryService.createProcessDefinitionQuery()
+                 .processDefinitionKey("defect")
+                 .count();
         long countloan = repositoryService.createProcessDefinitionQuery()
                 .processDefinitionKey("loan")
                 .count();
-        //if (count == 0) {
-            //processEngine.getRepositoryService().createDeployment()
-              //  .addZipInputStream(new ZipInputStream(this.getClass().getClassLoader().getResourceAsStream("defect.zip")))
-              //  .deploy();
-        //}
+        if (count == 0) {
+            processEngine.getRepositoryService().createDeployment()
+                .addZipInputStream(new ZipInputStream(this.getClass().getClassLoader().getResourceAsStream("defect.zip")))
+                .deploy();
+        }
         
         if(countloan == 0) {
         	processEngine.getRepositoryService().createDeployment()

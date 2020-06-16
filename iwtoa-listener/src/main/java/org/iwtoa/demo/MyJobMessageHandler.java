@@ -58,7 +58,7 @@ public class MyJobMessageHandler implements AsyncHistoryJobMessageHandler {
         
         // Send to ES
         if (historicalData != null) {
-            client.prepareIndex("flowable", "variables")
+            client.prepareIndex("iwtoaprocess", "variables")
                 .setSource(historicalData, XContentType.JSON)
                 .setRefreshPolicy(RefreshPolicy.IMMEDIATE) // for demo purpose
                 .get();
