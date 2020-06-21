@@ -20,7 +20,7 @@ public class EmailHelper {
 			email.setFrom("dpa.qa.automation@gmail.com");
 			email.setSubject("DPA-PIPELINE");
 			email.setMsg(emailBody);
-			email.addTo("nkarunathilaka@zaizi.com");            
+			email.addTo("murshidhassen@zaizi.com");            
 	        email.send();
 	        System.out.println("Email-sent-successfully");
 		} catch (Exception e) {

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
+
+// Sets Remote URL and Local Dev URLs
 public class PropertyReader {
 
 	private static FileInputStream file;

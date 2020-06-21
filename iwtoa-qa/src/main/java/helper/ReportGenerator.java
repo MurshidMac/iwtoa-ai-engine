@@ -19,7 +19,7 @@ public class ReportGenerator {
 	
 	public static ExtentReports createInstance(String reportLocation) {
 		ExtentSparkReporter spark = new ExtentSparkReporter(reportLocation);
-		spark.config().setDocumentTitle("DPA-TEST-REPORT");
+		spark.config().setDocumentTitle("IWTOA-TEST-REPORT");
 		spark.config().setTheme(Theme.DARK);
 		extent = new ExtentReports();
 		extent.attachReporter(spark);

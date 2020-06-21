@@ -16,7 +16,7 @@ public class TenentDetailsPageTest extends TestBase{
 		openApplication();
 		TenentDetailsPage tenentdetailspage = new TenentDetailsPage(driver);		
 		logExtentReport("info","entering tenent details");
-		AddressSearchPage addresssearchpage = tenentdetailspage.fill_form_with_valid_info("Nimesh Karunathilaka", "nimeshkarunathilaka96@gmail.com", "+94767373075");
+		AddressSearchPage addresssearchpage = tenentdetailspage.fill_form_with_valid_info("Murshid Hassen", "MurshidHassen@gmail.com", "+94767373075");
 		addresssearchpage.verifyAddressHeader();
 		logExtentReport("pass","details entered successfully");
 		logExtentReport("info","entering postal code");
@@ -31,7 +31,7 @@ public class TenentDetailsPageTest extends TestBase{
 		openApplication();
 		TenentDetailsPage tenentdetailspage = new TenentDetailsPage(driver);		
 		logExtentReport("info","entering tenent details");
-		AddressSearchPage addresssearchpage = tenentdetailspage.fill_form_with_valid_info("Nimesh Karunathilaka", "nimeshkarunathilaka96@gmail.com", "+94767373075");
+		AddressSearchPage addresssearchpage = tenentdetailspage.fill_form_with_valid_info("Murshid Hassen", "murshidhassen@gmail.com", "+94767373075");
 		addresssearchpage.verifyAddressHeader();
 		Thread.sleep(5000);
 	}

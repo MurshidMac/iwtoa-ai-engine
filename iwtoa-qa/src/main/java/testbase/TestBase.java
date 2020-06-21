@@ -2,6 +2,7 @@ package testbase;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -30,9 +31,14 @@ public class TestBase {
 	public WebDriver driver;
 	public static ExtentReports extent;
 	public static ExtentTest test;
-	String remoteURL = System.getProperty("DOCKER_URL");
-	String appURL = System.getProperty("APP_URL");
+	// String remoteURL = System.getProperty("DOCKER_URL");
+	// String appURL = System.getProperty("APP_URL");
+	private static final Logger LOGGER = Logger.getLogger("TestBase");
+
+	String remoteURL = System.getProperty("remote_url");
+	String appURL = System.getProperty("URL");
 	
+
 	@BeforeSuite
 	public void beforeSuite() {
 		extent = ReportGenerator.getInstance();
@@ -58,11 +64,16 @@ public class TestBase {
 			System.out.println("docker-url from config file : " + PropertyReader.getRemoteURL());
 			System.out.println("app-url from config file : " + PropertyReader.getURL());
 			address = new URL(PropertyReader.getRemoteURL());
+			LOGGER.info("Address   "+ address);
+			LOGGER.info("options   "+ options);
+			LOGGER.info("Driver Before   "+ driver);
 			driver = new RemoteWebDriver(address, options);
+			LOGGER.info("Driver After   "+ driver);
+
 		} else {
 			// reading remote WebDriver URL from environment variables
-			System.out.println("docker-url from enviorenemnt variables - " + System.getProperty("DOCKER_URL"));
-			System.out.println("app-url from enviorenemnt variables - " + System.getProperty("APP_URL"));
+			System.out.println("docker-url from enviorenemnt variables - " + System.getProperty("remote_url"));
+			System.out.println("app-url from enviorenemnt variables - " + System.getProperty("URL"));
 			address = new URL(remoteURL);
 			driver = new RemoteWebDriver(address, options);
 		}
